@@ -1,0 +1,82 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage1.master.cs" Inherits="M17BE_Loja_equipamentos.MasterPage1" %>
+
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Loja de Equipamentos</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    
+    <style>
+        body { min-height: 100vh; display: flex; flex-wrap: nowrap; overflow-x: hidden; }
+        .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; background-color: #f8f9fa; }
+        .sidebar-container { min-height: 100vh; position: sticky; top: 0; }
+        /* Remove o sublinhado padrão dos LinkButtons */
+        .nav-link { text-decoration: none !important; }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server" class="d-flex w-100">
+        
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar-container" style="width: 280px;">
+            <a href="index.aspx" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span class="fs-4 fw-bold">🛠️ EquipShop</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <asp:LinkButton ID="btnHome" runat="server" CssClass="nav-link text-white mb-1" OnClick="btnHome_Click">
+                        Home
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnDashboard" runat="server" CssClass="nav-link text-white mb-1" OnClick="btnDashboard_Click">
+                        Dashboard
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnEncomendas" runat="server" CssClass="nav-link text-white mb-1" OnClick="btnEncomendas_Click">
+                        Produtos
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnProdutos" runat="server" CssClass="nav-link text-white mb-1" OnClick="btnProdutos_Click">
+                        Produtos
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnClientes" runat="server" CssClass="nav-link text-white mb-1" OnClick="btnClientes_Click">
+                        Clientes
+                    </asp:LinkButton>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>Admin</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                    <li><a class="dropdown-item" href="#">Perfil</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <asp:LinkButton ID="btnSair" runat="server" CssClass="dropdown-item" OnClick="btnSair_Click">Sair</asp:LinkButton>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </main>
+
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
