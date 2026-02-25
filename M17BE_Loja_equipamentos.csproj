@@ -68,12 +68,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\Dashboard.aspx" />
-    <Content Include="Global.asax" />
-    <Content Include="index.aspx" />
-    <Content Include="Login.aspx" />
-    <Content Include="Loja.aspx" />
-    <Content Include="Produto.aspx" />
-    <Content Include="Registro.aspx" />
+    <Content Include="Geral\Carrinho.aspx" />
+    <Content Include="Geral\Favoritos.aspx" />
+    <Content Include="Geral\Global.asax" />
+    <Content Include="Geral\index.aspx" />
+    <Content Include="Geral\Login.aspx" />
+    <Content Include="Geral\Loja.aspx" />
+    <Content Include="Geral\Produto.aspx" />
+    <Content Include="Geral\Registro.aspx" />
+    <Content Include="Public\Img\ICON WEB.png" />
+    <Content Include="Public\Img\icon.png" />
+    <Content Include="Public\Img\icon.ico" />
+    <Content Include="Public\Img\icon.jpg" />
+    <Content Include="ScriptBaseDados.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -84,63 +91,79 @@
     <Compile Include="Admin\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ClienteMasterPage.Master.cs">
+    <Compile Include="Classes\BaseDados.cs" />
+    <Compile Include="Classes\Utilizadores.cs" />
+    <Compile Include="Geral\Carrinho.aspx.cs">
+      <DependentUpon>Carrinho.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Geral\Carrinho.aspx.designer.cs">
+      <DependentUpon>Carrinho.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Geral\ClienteMasterPage.Master.cs">
       <DependentUpon>ClienteMasterPage.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ClienteMasterPage.Master.designer.cs">
+    <Compile Include="Geral\ClienteMasterPage.Master.designer.cs">
       <DependentUpon>ClienteMasterPage.Master</DependentUpon>
     </Compile>
-    <Compile Include="Global.asax.cs">
+    <Compile Include="Geral\Favoritos.aspx.cs">
+      <DependentUpon>Favoritos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Geral\Favoritos.aspx.designer.cs">
+      <DependentUpon>Favoritos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Geral\Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="index.aspx.cs">
+    <Compile Include="Geral\index.aspx.cs">
       <DependentUpon>index.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="index.aspx.designer.cs">
+    <Compile Include="Geral\index.aspx.designer.cs">
       <DependentUpon>index.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Login.aspx.cs">
+    <Compile Include="Geral\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Login.aspx.designer.cs">
+    <Compile Include="Geral\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Loja.aspx.cs">
+    <Compile Include="Geral\Loja.aspx.cs">
       <DependentUpon>Loja.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Loja.aspx.designer.cs">
+    <Compile Include="Geral\Loja.aspx.designer.cs">
       <DependentUpon>Loja.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MasterPage1.Master.cs">
-      <DependentUpon>MasterPage1.Master</DependentUpon>
+    <Compile Include="Admin\AdminMasterPage.Master.cs">
+      <DependentUpon>AdminMasterPage.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MasterPage1.Master.designer.cs">
-      <DependentUpon>MasterPage1.Master</DependentUpon>
+    <Compile Include="Admin\AdminMasterPage.Master.designer.cs">
+      <DependentUpon>AdminMasterPage.Master</DependentUpon>
     </Compile>
-    <Compile Include="Produto.aspx.cs">
+    <Compile Include="Geral\Produto.aspx.cs">
       <DependentUpon>Produto.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Produto.aspx.designer.cs">
+    <Compile Include="Geral\Produto.aspx.designer.cs">
       <DependentUpon>Produto.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Registro.aspx.cs">
+    <Compile Include="Geral\Registro.aspx.cs">
       <DependentUpon>Registro.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Registro.aspx.designer.cs">
+    <Compile Include="Geral\Registro.aspx.designer.cs">
       <DependentUpon>Registro.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MasterPage1.Master" />
-    <Content Include="ClienteMasterPage.Master" />
+    <Content Include="Admin\AdminMasterPage.Master" />
+    <Content Include="Geral\ClienteMasterPage.Master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -151,9 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Classes\" />
     <Folder Include="Models\" />
-    <Folder Include="Public\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

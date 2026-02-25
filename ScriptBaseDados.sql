@@ -32,12 +32,13 @@ CREATE TABLE Utilizadores (
     DataRegisto DATETIME DEFAULT GETDATE()
 );
 
+
 CREATE TABLE Encomendas (
     IdEncomenda INT PRIMARY KEY IDENTITY(1,1),
     IdUtilizador INT NOT NULL,
     DataEncomenda DATETIME DEFAULT GETDATE(),
     Total DECIMAL(10,2),
-    Estado NVARCHAR(50) CHECK  Estado in ('Pendente','A Caminho','Entregue')DEFAULT 'Pendente',
+    Estado NVARCHAR(50) CHECK (Estado in ('Pendente','A Caminho','Entregue')) DEFAULT 'Pendente',
 
     FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador)
 );
@@ -53,8 +54,6 @@ CREATE TABLE EncomendaDetalhe (
     FOREIGN KEY (IdEncomenda) REFERENCES Encomendas(IdEncomenda),
     FOREIGN KEY (IdProduto) REFERENCES Produtos(IdProduto)
 );
-
-
 
 
 --Opcional: Tabela para avaliações de produtos

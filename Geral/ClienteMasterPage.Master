@@ -1,0 +1,95 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="ClienteMasterPage.master.cs" Inherits="M17BE_Loja_equipamentos.ClienteMasterPage" %>
+
+
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GymMarket - Loja</title>
+    <link rel="icon" type="image/x-icon" href="../Public/Img/ICON WEB.png" />
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    
+    <style>
+        body { min-height: 100vh; display: flex; flex-wrap: nowrap; overflow-x: hidden; background-color: #1a1a1a; color: white; }
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; background-color: #f8f9fa; color: #333; }
+        .sidebar-container { min-height: 100vh; position: sticky; top: 0; background-color: #000 !important; border-right: 2px solid #8B0000; }
+        .nav-link { color: white !important; transition: 0.3s; }
+        .nav-link:hover { background-color: #570303 !important; }
+        .nav-link.active { background-color: #8B0000 !important; font-weight: bold; }
+
+        .nav-link.active i {
+            color: #FF4D4D !important;
+        }
+        .nav-link:hover i {
+            color: #FF4D4D !important;
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server" class="d-flex w-100">
+        
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar-container" style="width: 280px;">
+            <a href="Home.aspx" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <img src="../Public/Img/ICON WEB.png" alt="Logo" width="70" height="45" class="me-2 rounded-circle" />
+    
+                <span class="fs-4 fw-bold">
+                    <span style="color: #8B0000;">Gym</span>Market
+                </span>
+            </a>
+            <hr style="border-color: #8B0000;">
+            
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <asp:LinkButton ID="btnHome" runat="server" CssClass="nav-link mb-1" OnClick="btnHome_Click">
+                        <i class="bi bi-house-door-fill"></i> Home
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnProdutos" runat="server" CssClass="nav-link mb-1" OnClick="btnLoja_Click">
+                        <i class="bi bi-grid-fill"></i> Produtos
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnFavoritos" runat="server" CssClass="nav-link mb-1" OnClick="btnFavoritos_Click">
+                        <i class="bi bi-suit-heart-fill"></i> Favoritos
+                    </asp:LinkButton>
+                </li>
+                <li>
+                    <asp:LinkButton ID="btnCarrinho" runat="server" CssClass="nav-link mb-1" OnClick="btnCarrinho_Click">
+                        <i class="bi bi-cart-fill"></i> Carrinho
+                    </asp:LinkButton>
+                </li>
+            </ul>
+            
+            <hr style="border-color: #8B0000;">
+            
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle fs-4 me-2"></i>
+                    <strong>Minha Conta</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                    <li><a class="dropdown-item" href="#">Os meus pedidos</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <asp:LinkButton ID="btnSair" runat="server" CssClass="dropdown-item" OnClick="btnSair_Click">Sair</asp:LinkButton>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </main>
+
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
