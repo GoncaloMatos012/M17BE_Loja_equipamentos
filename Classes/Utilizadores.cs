@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace M17BE_Loja_equipamentos.Classes
 {
-    /*
     public class Utilizadores
     {
         public int IdUtilizador { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public bool Admin { get; set; } 
+        public int Sal { get; set; }
+        public string Token { get; set; } 
+        public bool Admin { get; set; }
         public DateTime DataRegisto { get; set; }
 
         BaseDados bd;
@@ -24,16 +23,28 @@ namespace M17BE_Loja_equipamentos.Classes
             bd = new BaseDados();
         }
 
+        #region Autenticação e Registo
         public bool VerificaLogin()
         {
-            // Nota: Removi o 'concat' com Sal pois não está no teu CREATE TABLE. 
-            // Se adicionares o Sal, volta a colocar o concat.
-            string sql = "SELECT * FROM Utilizadores WHERE Email=@Email AND Password=HASHBYTES('SHA2_512', @Password)";
+            // Primeiro buscamos o Sal do utilizador pelo email
+            string sqlSal = "SELECT Sal FROM Utilizadores WHERE Email = @Email";
+            List<SqlParameter> pSal = new List<SqlParameter> {
+                new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email }
+            };
+            DataTable dtSal = bd.devolveSQL(sqlSal, pSal);
+
+            if (dtSal == null || dtSal.Rows.Count == 0) return false;
+
+            int salRecuperado = int.Parse(dtSal.Rows[0]["Sal"].ToString());
+
+            // Agora verificamos a password usando o Sal recuperado
+            string sql = "SELECT * FROM Utilizadores WHERE Email=@Email AND Password = HASHBYTES('SHA2_512', CONCAT(@Password, @Sal))";
 
             List<SqlParameter> parametros = new List<SqlParameter>()
             {
                 new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email },
-                new SqlParameter("@Password", SqlDbType.VarChar) { Value = this.Password }
+                new SqlParameter("@Password", SqlDbType.VarChar) { Value = this.Password },
+                new SqlParameter("@Sal", SqlDbType.Int) { Value = salRecuperado }
             };
 
             DataTable dados = bd.devolveSQL(sql, parametros);
@@ -44,25 +55,65 @@ namespace M17BE_Loja_equipamentos.Classes
             this.IdUtilizador = int.Parse(dados.Rows[0]["IdUtilizador"].ToString());
             this.Nome = dados.Rows[0]["Nome"].ToString();
             this.Email = dados.Rows[0]["Email"].ToString();
-            this.IsAdmin = bool.Parse(dados.Rows[0]["Admin"].ToString());
+            this.Admin = bool.Parse(dados.Rows[0]["Admin"].ToString());
 
             return true;
         }
+        #endregion
 
+
+        #region CRUD
         public void Adicionar()
         {
-            string sql = @"INSERT INTO Utilizadores (Nome, Email, Password, Admin)
-                           VALUES (@Nome, @Email, HASHBYTES('SHA2_512', @Password), @Admin)";
+            // Gerar um Sal aleatório
+            Random r = new Random();
+            int novoSal = r.Next(1000, 9999);//Para devolver um int entre 1000 e 9999
+
+            string sql = @"INSERT INTO Utilizadores (Nome, Email, Password, Sal, Admin)
+                           VALUES (@Nome, @Email, HASHBYTES('SHA2_512', CONCAT(@Password, @Sal)), @Sal, @Admin)";
 
             List<SqlParameter> parametros = new List<SqlParameter>()
             {
                 new SqlParameter("@Nome", SqlDbType.NVarChar) { Value = this.Nome },
                 new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email },
                 new SqlParameter("@Password", SqlDbType.VarChar) { Value = this.Password },
-                new SqlParameter("@Admin", SqlDbType.Bit) { Value = this.IsAdmin }
+                new SqlParameter("@Sal", SqlDbType.Int) { Value = novoSal },
+                new SqlParameter("@Admin", SqlDbType.Bit) { Value = this.Admin }
             };
 
             bd.executaSQL(sql, parametros);
+        }
+
+        //Recuperar password - Gerar um token e guardar na BD
+
+        public void GuardarToken(string email, string guid)
+        {
+            string sql = "UPDATE Utilizadores SET token = @token WHERE Email = @Email";
+            List<SqlParameter> p = new List<SqlParameter> {
+                new SqlParameter("@token", guid),
+                new SqlParameter("@Email", email)
+            };
+            bd.executaSQL(sql, p);
+        }
+
+        public void AtualizarPasswordPorToken(string guid, string novaPassword)
+        {
+            
+            Random r = new Random();
+            int novoSal = r.Next(1000, 9999);
+
+            string sql = @"UPDATE Utilizadores 
+                           SET Password = HASHBYTES('SHA2_512', CONCAT(@Password, @Sal)), 
+                               Sal = @Sal, 
+                               token = NULL 
+                           WHERE token = @token";
+
+            List<SqlParameter> p = new List<SqlParameter> {
+                new SqlParameter("@Password", novaPassword),
+                new SqlParameter("@Sal", novoSal),
+                new SqlParameter("@token", guid)
+            };
+            bd.executaSQL(sql, p);
         }
 
         public DataTable ListaTodosUtilizadores()
@@ -70,49 +121,13 @@ namespace M17BE_Loja_equipamentos.Classes
             return bd.devolveSQL("SELECT IdUtilizador, Nome, Email, Admin, DataRegisto FROM Utilizadores");
         }
 
-        public void AtualizarUtilizador()
-        {
-            string sql = "UPDATE Utilizadores SET Nome=@Nome, Email=@Email WHERE IdUtilizador=@Id";
-
-            List<SqlParameter> parametros = new List<SqlParameter>()
-            {
-                new SqlParameter("@Nome", SqlDbType.NVarChar) { Value = this.Nome },
-                new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email },
-                new SqlParameter("@Id", SqlDbType.Int) { Value = this.IdUtilizador }
-            };
-            bd.executaSQL(sql, parametros);
-        }
-
-        public DataTable DevolveDadosUtilizador(int id)
-        {
-            string sql = "SELECT * FROM Utilizadores WHERE IdUtilizador=@Id";
-            List<SqlParameter> parametros = new List<SqlParameter>()
-            {
-                new SqlParameter("@Id", SqlDbType.Int) { Value = id }
-            };
-            return bd.devolveSQL(sql, parametros);
-        }
-
         public void RemoverUtilizador(int id)
         {
             string sql = "DELETE FROM Utilizadores WHERE IdUtilizador=@Id";
-            List<SqlParameter> parametros = new List<SqlParameter>()
-            {
-                new SqlParameter("@Id", SqlDbType.Int) { Value = id }
-            };
-            bd.executaSQL(sql, parametros);
+            List<SqlParameter> p = new List<SqlParameter> { new SqlParameter("@Id", id) };
+            bd.executaSQL(sql, p);
         }
 
-        // Método para atualizar password (útil para recuperação)
-        public void AtualizarPassword(int id, string novaPassword)
-        {
-            string sql = "UPDATE Utilizadores SET Password=HASHBYTES('SHA2_512', @Password) WHERE IdUtilizador=@Id";
-            List<SqlParameter> parametros = new List<SqlParameter>()
-            {
-                new SqlParameter("@Password", SqlDbType.VarChar) { Value = novaPassword },
-                new SqlParameter("@Id", SqlDbType.Int) { Value = id }
-            };
-            bd.executaSQL(sql, parametros);
-        }
-    }*/
+
+    }
 }

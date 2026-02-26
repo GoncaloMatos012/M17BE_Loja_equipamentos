@@ -8,10 +8,10 @@
 CREATE TABLE Produtos (
     IdProduto INT PRIMARY KEY IDENTITY(1,1),
     Nome NVARCHAR(150) NOT NULL,
-    Descricao NVARCHAR(MAX),
-    Preco DECIMAL(10,2) NOT NULL,
-    Stock INT NOT NULL,
-    Marca NVARCHAR(100),
+    Descricao NVARCHAR(500),
+    Preco DECIMAL(10,2) NOT NULL CHECK (Preco >= 0),
+    Stock INT NOT NULL CHECK (Stock >= 0),
+    Marca NVARCHAR(100) NOT NULL CHECK (Marca not like ''),
     CategoriaId INT NOT NULL,
     DataCriacao DATETIME DEFAULT GETDATE(),
     Destaque BIT DEFAULT 0,
@@ -28,6 +28,8 @@ CREATE TABLE Utilizadores (
     Nome NVARCHAR(100) NOT NULL,
     Email NVARCHAR(150) UNIQUE NOT NULL,
     Password NVARCHAR(255) NOT NULL,
+    sal int,
+	token varchar(100),
     Admin bit NOT NULL, -- "Admin" ou "Cliente"
     DataRegisto DATETIME DEFAULT GETDATE()
 );
@@ -43,17 +45,45 @@ CREATE TABLE Encomendas (
     FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador)
 );
 
-
 CREATE TABLE EncomendaDetalhe (
     IdDetalhe INT PRIMARY KEY IDENTITY(1,1),
     IdEncomenda INT NOT NULL,
     IdProduto INT NOT NULL,
-    Quantidade INT NOT NULL,
+    Quantidade INT NOT NULL CHECK (Quantidade>0),
     PrecoUnitario DECIMAL(10,2) NOT NULL,
 
     FOREIGN KEY (IdEncomenda) REFERENCES Encomendas(IdEncomenda),
     FOREIGN KEY (IdProduto) REFERENCES Produtos(IdProduto)
 );
+
+
+
+CREATE TABLE Carrinho (
+    IdCarrinho INT PRIMARY KEY IDENTITY(1,1),
+    IdUtilizador INT NOT NULL,
+    IdProduto INT NOT NULL,
+    Quantidade INT NOT NULL CHECK (Quantidade > 0),
+    DataAdicionado DATETIME DEFAULT GETDATE(),
+
+    FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador),
+    FOREIGN KEY (IdProduto) REFERENCES Produtos(IdProduto),
+
+    CONSTRAINT UQ_Carrinho UNIQUE (IdUtilizador, IdProduto)
+);
+
+
+CREATE TABLE Favoritos (
+    IdFavorito INT PRIMARY KEY IDENTITY(1,1),
+    IdUtilizador INT NOT NULL,
+    IdProduto INT NOT NULL,
+
+    FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador),
+    FOREIGN KEY (IdProduto) REFERENCES Produtos(IdProduto),
+
+    CONSTRAINT UQ_Favorito UNIQUE (IdUtilizador, IdProduto)
+);
+
+
 
 
 --Opcional: Tabela para avaliações de produtos

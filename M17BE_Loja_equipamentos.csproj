@@ -91,7 +91,14 @@
     <Compile Include="Admin\Dashboard.aspx.designer.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Avaliações.cs" />
     <Compile Include="Classes\BaseDados.cs" />
+    <Compile Include="Classes\Carrinho.cs" />
+    <Compile Include="Classes\Categoria.cs" />
+    <Compile Include="Classes\Encomenda.cs" />
+    <Compile Include="Classes\Encomendadetalhe.cs" />
+    <Compile Include="Classes\Favoritos.cs" />
+    <Compile Include="Classes\Produto.cs" />
     <Compile Include="Classes\Utilizadores.cs" />
     <Compile Include="Geral\Carrinho.aspx.cs">
       <DependentUpon>Carrinho.aspx</DependentUpon>
