@@ -15,7 +15,6 @@ CREATE TABLE Produtos (
     CategoriaId INT NOT NULL,
     DataCriacao DATETIME DEFAULT GETDATE(),
     Destaque BIT DEFAULT 0,
-    MaisVendido BIT DEFAULT 0,
     ImagemURL NVARCHAR(255),
 
     FOREIGN KEY (CategoriaId) REFERENCES Categorias(IdCategoria)
@@ -31,7 +30,8 @@ CREATE TABLE Utilizadores (
     sal int,
 	token varchar(100),
     Admin bit NOT NULL, -- "Admin" ou "Cliente"
-    DataRegisto DATETIME DEFAULT GETDATE()
+    DataRegisto DATETIME DEFAULT GETDATE(),
+    Ativo bit DEFAULT 1
 );
 
 
@@ -39,7 +39,7 @@ CREATE TABLE Encomendas (
     IdEncomenda INT PRIMARY KEY IDENTITY(1,1),
     IdUtilizador INT NOT NULL,
     DataEncomenda DATETIME DEFAULT GETDATE(),
-    Total DECIMAL(10,2),
+    Total DECIMAL(12,2),
     Estado NVARCHAR(50) CHECK (Estado in ('Pendente','A Caminho','Entregue')) DEFAULT 'Pendente',
 
     FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador)
@@ -96,5 +96,8 @@ CREATE TABLE Avaliacoes (
     DataAvaliacao DATETIME DEFAULT GETDATE(),
 
     FOREIGN KEY (IdProduto) REFERENCES Produtos(IdProduto),
-    FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador)
+    FOREIGN KEY (IdUtilizador) REFERENCES Utilizadores(IdUtilizador),
+
+    --Para evitar reviewbombing
+    CONSTRAINT UQ_Avaliacao_User_Produto UNIQUE (IdUtilizador, IdProduto)
 );

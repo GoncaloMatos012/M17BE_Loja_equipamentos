@@ -11,7 +11,10 @@ namespace M17BE_Loja_equipamentos
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["IsAdmin"] == null || !(bool)Session["IsAdmin"])
+            {
+                Response.Redirect("../Geral/Login.aspx");
+            }
         }
 
         protected void btnHome_Click(object sender, EventArgs e)

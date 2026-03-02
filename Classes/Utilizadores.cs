@@ -7,26 +7,29 @@ namespace M17BE_Loja_equipamentos.Classes
 {
     public class Utilizadores
     {
+      
         public int IdUtilizador { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public int Sal { get; set; }
-        public string Token { get; set; } 
+        public string Token { get; set; }
         public bool Admin { get; set; }
         public DateTime DataRegisto { get; set; }
 
         BaseDados bd;
+        
 
+        
         public Utilizadores()
         {
             bd = new BaseDados();
         }
-
-        #region Autenticação e Registo
+        
+        #region Autenticação e Segurança
         public bool VerificaLogin()
         {
-            // Primeiro buscamos o Sal do utilizador pelo email
+            // Sal do utilizador pelo email
             string sqlSal = "SELECT Sal FROM Utilizadores WHERE Email = @Email";
             List<SqlParameter> pSal = new List<SqlParameter> {
                 new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email }
@@ -37,7 +40,7 @@ namespace M17BE_Loja_equipamentos.Classes
 
             int salRecuperado = int.Parse(dtSal.Rows[0]["Sal"].ToString());
 
-            // Agora verificamos a password usando o Sal recuperado
+            //verificar a password usando o Sal 
             string sql = "SELECT * FROM Utilizadores WHERE Email=@Email AND Password = HASHBYTES('SHA2_512', CONCAT(@Password, @Sal))";
 
             List<SqlParameter> parametros = new List<SqlParameter>()
@@ -59,32 +62,6 @@ namespace M17BE_Loja_equipamentos.Classes
 
             return true;
         }
-        #endregion
-
-
-        #region CRUD
-        public void Adicionar()
-        {
-            // Gerar um Sal aleatório
-            Random r = new Random();
-            int novoSal = r.Next(1000, 9999);//Para devolver um int entre 1000 e 9999
-
-            string sql = @"INSERT INTO Utilizadores (Nome, Email, Password, Sal, Admin)
-                           VALUES (@Nome, @Email, HASHBYTES('SHA2_512', CONCAT(@Password, @Sal)), @Sal, @Admin)";
-
-            List<SqlParameter> parametros = new List<SqlParameter>()
-            {
-                new SqlParameter("@Nome", SqlDbType.NVarChar) { Value = this.Nome },
-                new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email },
-                new SqlParameter("@Password", SqlDbType.VarChar) { Value = this.Password },
-                new SqlParameter("@Sal", SqlDbType.Int) { Value = novoSal },
-                new SqlParameter("@Admin", SqlDbType.Bit) { Value = this.Admin }
-            };
-
-            bd.executaSQL(sql, parametros);
-        }
-
-        //Recuperar password - Gerar um token e guardar na BD
 
         public void GuardarToken(string email, string guid)
         {
@@ -98,7 +75,6 @@ namespace M17BE_Loja_equipamentos.Classes
 
         public void AtualizarPasswordPorToken(string guid, string novaPassword)
         {
-            
             Random r = new Random();
             int novoSal = r.Next(1000, 9999);
 
@@ -115,6 +91,29 @@ namespace M17BE_Loja_equipamentos.Classes
             };
             bd.executaSQL(sql, p);
         }
+        #endregion
+
+        #region CRUD (Gestão de Utilizadores)
+        public void Adicionar()
+        {
+            // Gerar um Sal aleatório
+            Random r = new Random();
+            int novoSal = r.Next(1000, 9999);
+
+            string sql = @"INSERT INTO Utilizadores (Nome, Email, Password, Sal, Admin)
+                           VALUES (@Nome, @Email, HASHBYTES('SHA2_512', CONCAT(@Password, @Sal)), @Sal, @Admin)";
+
+            List<SqlParameter> parametros = new List<SqlParameter>()
+            {
+                new SqlParameter("@Nome", SqlDbType.NVarChar) { Value = this.Nome },
+                new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email },
+                new SqlParameter("@Password", SqlDbType.VarChar) { Value = this.Password },
+                new SqlParameter("@Sal", SqlDbType.Int) { Value = novoSal },
+                new SqlParameter("@Admin", SqlDbType.Bit) { Value = this.Admin }
+            };
+
+            bd.executaSQL(sql, parametros);
+        }
 
         public DataTable ListaTodosUtilizadores()
         {
@@ -127,7 +126,6 @@ namespace M17BE_Loja_equipamentos.Classes
             List<SqlParameter> p = new List<SqlParameter> { new SqlParameter("@Id", id) };
             bd.executaSQL(sql, p);
         }
-
-
+        #endregion
     }
 }

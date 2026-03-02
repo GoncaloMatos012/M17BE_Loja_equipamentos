@@ -48,12 +48,12 @@ namespace M17BE_Loja_equipamentos
 
         protected void btnHome_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Home.aspx");
+            Response.Redirect("index.aspx");
         }
 
         protected void btnLoja_Click(object sender, EventArgs e)
         {
-           
+
             Response.Redirect("Produtos.aspx");
         }
 
