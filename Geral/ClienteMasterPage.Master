@@ -74,11 +74,11 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
         
-                    <asp:PlaceHolder ID="phVisitante" runat="server">
+                    <asp:PlaceHolder ID="dp_Visitante" runat="server">
                         <li><a class="dropdown-item" href="Login.aspx"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a></li>
                     </asp:PlaceHolder>
 
-                    <asp:PlaceHolder ID="phLogado" runat="server" Visible="false">
+                    <asp:PlaceHolder ID="dp_Logado" runat="server" Visible="false">
                         <li><a class="dropdown-item" href="#"><i class="bi bi-bag-check me-2"></i>Os meus pedidos</a></li>
                         <li><a class="dropdown-item" href="#"><i class="bi bi-person-gear me-2"></i>Editar Perfil</a></li>
                         <li><hr class="dropdown-divider"></li>

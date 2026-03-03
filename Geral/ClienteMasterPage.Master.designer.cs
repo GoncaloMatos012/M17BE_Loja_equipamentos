@@ -69,22 +69,22 @@ namespace M17BE_Loja_equipamentos
         protected global::System.Web.UI.WebControls.LinkButton btnCarrinho;
 
         /// <summary>
-        /// Controle phVisitante.
+        /// Controle dp_Visitante.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phVisitante;
+        protected global::System.Web.UI.WebControls.PlaceHolder dp_Visitante;
 
         /// <summary>
-        /// Controle phLogado.
+        /// Controle dp_Logado.
         /// </summary>
         /// <remarks>
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phLogado;
+        protected global::System.Web.UI.WebControls.PlaceHolder dp_Logado;
 
         /// <summary>
         /// Controle btnSair.

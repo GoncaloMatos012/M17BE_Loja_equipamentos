@@ -12,12 +12,33 @@ namespace M17BE_Loja_equipamentos
             if (!IsPostBack)
             {
                 MarcarBotaoAtivo();
+                VerificarEstadoLogin();
             }
+        }
+
+        private void VerificarEstadoLogin()
+        {
+            // Verifica se a variável de sessão 'UserID' existe
+            bool estaLogado = Session["UserID"] != null;
+
+            // Altera a visibilidade dos itens da dp
+            dp_Logado.Visible = estaLogado;
+            dp_Visitante.Visible = !estaLogado; 
+        }
+
+        protected void btnSair_Click(object sender, EventArgs e)
+        {
+            // Limpa todos os dados da sessão 
+            Session.Clear();
+            Session.Abandon();
+
+            // Redireciona para a página inicial ou login
+            Response.Redirect("index.aspx");
         }
 
         private void MarcarBotaoAtivo()
         {
-            // Obtém o nome da página atual do URL (ex: Home.aspx)
+            // Obtém o nome da página atual do URL (ex: carrinho.aspx)
             string paginaAtual = System.IO.Path.GetFileName(Request.Url.AbsolutePath).ToLower();
 
             // Reset de classes (garante que todos voltam ao estado normal text-white)
@@ -67,17 +88,6 @@ namespace M17BE_Loja_equipamentos
             Response.Redirect("Carrinho.aspx");
         }
 
-        protected void btnSair_Click(object sender, EventArgs e)
-        {
-            // Limpa os dados do utilizador da memória do servidor
-            Session.Clear();
-            Session.Abandon();
-
-            // Remove o cookie de autenticação se estiveres a usar FormsAuthentication
-            System.Web.Security.FormsAuthentication.SignOut();
-
-            // Manda o cliente de volta para a página inicial ou login
-            Response.Redirect("Login.aspx");
-        }
+        
     }
 }

@@ -13,7 +13,7 @@ namespace M17BE_Loja_equipamentos
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Opcional: Se já estiver logado, redireciona para a home
+            // Se já estiver logado, redireciona para a home
             if (Session["UserID"] != null)
             {
                 RedirecionarUtilizador((bool)Session["IsAdmin"]);
@@ -35,6 +35,14 @@ namespace M17BE_Loja_equipamentos
             user.Email = txtEmail.Text;
             user.Password = txtPassword.Text;
 
+            var resposta = Request.Form["g-recaptcha-response"];
+            var validou = ReCaptcha.Validate(resposta);
+
+            if (validou == false) {
+                lblErro.Text = "Por favor, confirme que não é um robô.";
+                lblErro.Visible = true;
+                return;
+            }
             if (user.VerificaLogin()) 
             {
                 //cria os dados da sessao

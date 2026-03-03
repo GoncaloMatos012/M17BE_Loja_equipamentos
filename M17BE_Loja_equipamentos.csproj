@@ -68,6 +68,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\Dashboard.aspx" />
+    <Content Include="App_Data\GymMarket.mdf" />
+    <Content Include="App_Data\GymMarket_log.ldf">
+      <DependentUpon>GymMarket.mdf</DependentUpon>
+    </Content>
     <Content Include="Geral\Carrinho.aspx" />
     <Content Include="Geral\Favoritos.aspx" />
     <Content Include="Geral\Global.asax" />
@@ -190,7 +194,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
