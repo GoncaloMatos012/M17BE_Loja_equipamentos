@@ -29,7 +29,7 @@ CREATE TABLE Utilizadores (
     Password NVARCHAR(255) NOT NULL,
     sal int,
 	token varchar(100),
-    Admin bit NOT NULL, -- "Admin" ou "Cliente"
+    Admin bit NOT NULL default 0, -- "Admin" ou "Cliente"
     DataRegisto DATETIME DEFAULT GETDATE(),
     Ativo bit DEFAULT 1
 );

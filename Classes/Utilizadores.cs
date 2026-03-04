@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace M17BE_Loja_equipamentos.Classes
 {
@@ -96,9 +97,26 @@ namespace M17BE_Loja_equipamentos.Classes
         #region CRUD (Gestão de Utilizadores)
         public void Adicionar()
         {
+            // Validações antes de inserir
+            if (!EmailValido(this.Email))
+            {
+                throw new Exception("O formato do email não é válido.");
+            }
+
+            if (!EmailDisponivel(this.Email))
+            {
+                throw new Exception("O email indicado já se encontra registado no sistema.");
+            }
+
+            if(!PasswordForte(this.Email))
+            {                 
+                throw new Exception("A password deve ter pelo menos 8 caracteres e conter pelo menos um número.");
+            }
+
+
             // Gerar um Sal aleatório
             Random r = new Random();
-            int novoSal = r.Next(1000, 9999);
+            int novoSal = r.Next(1403, 9999);
 
             string sql = @"INSERT INTO Utilizadores (Nome, Email, Password, Sal, Admin)
                            VALUES (@Nome, @Email, HASHBYTES('SHA2_512', CONCAT(@Password, @Sal)), @Sal, @Admin)";
@@ -127,5 +145,40 @@ namespace M17BE_Loja_equipamentos.Classes
             bd.executaSQL(sql, p);
         }
         #endregion
+
+
+        #region Verificações
+
+        public bool EmailDisponivel(string email)
+        {
+            string sql = "SELECT COUNT(*) FROM Utilizadores WHERE Email = @Email";
+            List<SqlParameter> p = new List<SqlParameter> {new SqlParameter("@Email", email)};
+            // ExecutaScalar ou devolveSQL para verificar o resultado
+            DataTable dt = bd.devolveSQL(sql, p);
+            return int.Parse(dt.Rows[0][0].ToString()) == 0;
+        }
+
+        public bool EmailValido(string email)
+        {
+            if (string.IsNullOrEmpty(email)) return false;
+           
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        }
+
+        public bool PasswordForte(string password)
+        {
+            // Requisitos: Mínimo 8 caracteres, pelo menos 1 número
+            if (string.IsNullOrEmpty(password) || password.Length < 8)
+                return false;
+
+            
+            return Regex.IsMatch(password, @"[0-9]");
+
+            
+        }
+
+
+        #endregion
+
     }
 }

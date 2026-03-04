@@ -84,7 +84,7 @@
             </div>
 
             <div class="recaptcha-wrapper">
-                <div class="g-recaptcha" data-sitekey='<%= System.Configuration.ConfigurationManager.AppSettings["Google.ReCaptcha.Site"] %>' data-theme="dark">></div>
+                <div class="g-recaptcha" data-sitekey='<%= System.Configuration.ConfigurationManager.AppSettings["Google.ReCaptcha.Site"] %>' data-theme="dark"></div>
             </div>
 
             <asp:Label ID="lblErro" runat="server" CssClass="text-danger small mb-3 d-block text-center" Visible="false"></asp:Label>

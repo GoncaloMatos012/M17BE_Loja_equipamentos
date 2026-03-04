@@ -18,13 +18,23 @@ namespace M17BE_Loja_equipamentos
 
         protected void btnRegistar_Click(object sender, EventArgs e)
         {
-            Utilizadores novoUser = new Utilizadores();
-            novoUser.Nome = txtNome.Text;
-            novoUser.Email = txtEmail.Text;
-            novoUser.Password = txtPassword.Text;
-            novoUser.Admin = false; // Por defeito, regista como cliente
-            novoUser.Adicionar();
-            Response.Redirect("Login.aspx");
+
+            try
+            {
+                Utilizadores novoUser = new Utilizadores();
+                novoUser.Nome = txtNome.Text;
+                novoUser.Email = txtEmail.Text;
+                novoUser.Password = txtPassword.Text;
+                novoUser.Adicionar();
+                Response.Redirect("Login.aspx");
+            }
+            catch (Exception ex)
+            {
+                lblErro.Text = ex.Message;
+                lblErro.Visible = true;
+                lblErro.CssClass = "text-danger small mb-2 d-block"; // Garante que fica vermelho
+            }
+
         }
     }
 }

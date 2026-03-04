@@ -1,11 +1,11 @@
-﻿using System;
+﻿using M17BE_Loja_equipamentos.Classes; 
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Configuration;
+using System.Data;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using M17BE_Loja_equipamentos.Classes; 
 
 namespace M17BE_Loja_equipamentos
 {
@@ -22,6 +22,10 @@ namespace M17BE_Loja_equipamentos
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
+
+            lblErro.Visible = false;
+            lblErro.CssClass = "text-danger small mb-3 d-block text-center"; // fica vermelho
+                             
             // Validar campos vazios
             if (string.IsNullOrEmpty(txtEmail.Text) || string.IsNullOrEmpty(txtPassword.Text))
             {
@@ -40,6 +44,7 @@ namespace M17BE_Loja_equipamentos
 
             if (validou == false) {
                 lblErro.Text = "Por favor, confirme que não é um robô.";
+                lblErro.CssClass = "text-danger small mb-3 d-block text-center";
                 lblErro.Visible = true;
                 return;
             }

@@ -24,6 +24,7 @@
                 <label class="form-label">Password</label>
                 <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control bg-dark text-white border-secondary" TextMode="Password"></asp:TextBox>
             </div>
+            <asp:Label ID="lblErro" runat="server" CssClass="text-danger small mb-3 d-block text-center" Visible="false"></asp:Label>
             <asp:Button ID="btnRegistar" runat="server" Text="Registar" CssClass="btn btn-register w-100 mb-3" OnClick="btnRegistar_Click" />
             <p class="text-center small">Já tem conta? <a href="Login.aspx" style="color: #FF4D4D;">Faça Login</a></p>
         </div>
