@@ -1,10 +1,10 @@
-﻿using M17BE_Loja_equipamentos.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using M17BE_Loja_equipamentos.Classes;
 
 namespace M17BE_Loja_equipamentos
 {
@@ -14,22 +14,22 @@ namespace M17BE_Loja_equipamentos
         {
             if (!IsPostBack)
             {
-                CarregarDestauqes();
+                CarregarDestaques();
             }
         }
 
-        private void CarregarDestauqes()
+        private void CarregarDestaques()
         {
             //Carregar categorias destaques
             Categoria c = new Categoria();
             rptCategoriaDestaque.DataSource = c.ListaCategoriasDestaque();
-            rptCategorias.DataBind();
+            rptCategoriaDestaque.DataBind();
 
 
             //Carregar produtos destaques
-            Produto p = new Produto();
+            Classes.Produto p=new Classes.Produto();//Tá a dar problemas pq vai buscar á pagina aspx ns pq
             rptProdutoDestaque.DataSource = p.ListaDestaques();
-            rptDestaques.DataBind();
+            rptProdutoDestaque.DataBind();
         }
 
         

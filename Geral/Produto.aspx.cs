@@ -13,5 +13,10 @@ namespace M17BE_Loja_equipamentos
         {
 
         }
+
+        internal object ListaDestaques()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

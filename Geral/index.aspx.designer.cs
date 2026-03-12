@@ -21,7 +21,7 @@ namespace M17BE_Loja_equipamentos
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptDestaques;
+        protected global::System.Web.UI.WebControls.Repeater rptProdutoDestaque;
 
         /// <summary>
         /// Controle rptCategorias.
@@ -30,7 +30,7 @@ namespace M17BE_Loja_equipamentos
         /// Campo gerado automaticamente.
         /// Para modificar, mova a declaração de campo do arquivo de designer a um arquivo code-behind.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptCategorias;
+        protected global::System.Web.UI.WebControls.Repeater rptCategoriaDestaque;
 
         /// <summary>
         /// Controle sqlDestaques.

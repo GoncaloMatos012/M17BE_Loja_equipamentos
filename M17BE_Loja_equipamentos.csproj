@@ -69,8 +69,9 @@
   <ItemGroup>
     <Content Include="Admin\Dashboard.aspx" />
     <Content Include="App_Data\GymMarket.mdf" />
-    <Content Include="App_Data\GymMarket_log.ldf">
-      <DependentUpon>GymMarket.mdf</DependentUpon>
+    <Content Include="App_Data\LojaEquipamentosBD.mdf" />
+    <Content Include="App_Data\LojaEquipamentosBD_log.ldf">
+      <DependentUpon>LojaEquipamentosBD.mdf</DependentUpon>
     </Content>
     <Content Include="Geral\Carrinho.aspx" />
     <Content Include="Geral\Favoritos.aspx" />

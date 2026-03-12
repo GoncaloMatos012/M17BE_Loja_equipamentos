@@ -27,17 +27,6 @@ namespace M17BE_Loja_equipamentos.Classes
             bd = new BaseDados();
         }
 
-        // Listar todos os produtos (Geral)
-        public DataTable ListaTodosProdutos()
-        {
-            return bd.devolveSQL("SELECT P.*, C.NomeCategoria FROM Produtos P INNER JOIN Categorias C ON P.CategoriaId = C.IdCategoria");
-        }
-
-        // Listar produtos disponíveis para a Loja (com Stock)
-        public DataTable ListaProdutosDisponiveis()
-        {
-            return bd.devolveSQL("SELECT * FROM Produtos WHERE Stock > 0 ORDER BY DataCriacao DESC");
-        }
 
         public DataTable ListaDestaques()
         {
@@ -51,17 +40,6 @@ namespace M17BE_Loja_equipamentos.Classes
             List<SqlParameter> p = new List<SqlParameter>
             {
                 new SqlParameter("@catId", SqlDbType.Int) { Value = idCategoria }
-            };
-            return bd.devolveSQL(sql, p);
-        }
-
-        // Devolver detalhes de um único produto
-        public DataTable DevolveDadosProduto(int id)
-        {
-            string sql = "SELECT P.*, C.NomeCategoria FROM Produtos P INNER JOIN Categorias C ON P.CategoriaId = C.IdCategoria WHERE P.IdProduto = @id";
-            List<SqlParameter> p = new List<SqlParameter>
-            {
-                new SqlParameter("@id", SqlDbType.Int) { Value = id }
             };
             return bd.devolveSQL(sql, p);
         }
