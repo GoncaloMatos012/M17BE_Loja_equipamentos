@@ -14,7 +14,7 @@ namespace M17BE_Loja_equipamentos.Classes
             //objetos mail
             System.Net.Mail.MailMessage mensagem = new System.Net.Mail.MailMessage();
             System.Net.NetworkCredential credenciais = new System.Net.NetworkCredential(nomeDe, passwordDe);
-            System.Net.Mail.MailAddress dequem = new System.Net.Mail.MailAddress("exemplo@exemplo.com");// nomeDe);
+            System.Net.Mail.MailAddress dequem = new System.Net.Mail.MailAddress("suporte@gymmarket.pt");
             System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient();
 
             //mensagem

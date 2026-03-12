@@ -8,7 +8,6 @@ namespace M17BE_Loja_equipamentos.Classes
 {
     public class Utilizadores
     {
-      
         public int IdUtilizador { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
@@ -19,18 +18,16 @@ namespace M17BE_Loja_equipamentos.Classes
         public DateTime DataRegisto { get; set; }
 
         BaseDados bd;
-        
 
-        
         public Utilizadores()
         {
             bd = new BaseDados();
         }
-        
+
         #region Autenticação e Segurança
+
         public bool VerificaLogin()
         {
-            // Sal do utilizador pelo email
             string sqlSal = "SELECT Sal FROM Utilizadores WHERE Email = @Email";
             List<SqlParameter> pSal = new List<SqlParameter> {
                 new SqlParameter("@Email", SqlDbType.NVarChar) { Value = this.Email }
@@ -41,7 +38,6 @@ namespace M17BE_Loja_equipamentos.Classes
 
             int salRecuperado = int.Parse(dtSal.Rows[0]["Sal"].ToString());
 
-            //verificar a password usando o Sal 
             string sql = "SELECT * FROM Utilizadores WHERE Email=@Email AND Password = HASHBYTES('SHA2_512', CONCAT(@Password, @Sal))";
 
             List<SqlParameter> parametros = new List<SqlParameter>()
@@ -64,40 +60,36 @@ namespace M17BE_Loja_equipamentos.Classes
             return true;
         }
 
-        public void GuardarToken(string email, string guid)
+        public void recuperarPassword(string email, string guid)
         {
-            string sql = "UPDATE Utilizadores SET token = @token WHERE Email = @Email";
-            List<SqlParameter> p = new List<SqlParameter> {
-                new SqlParameter("@token", guid),
-                new SqlParameter("@Email", email)
+            string sql = "UPDATE utilizadores set token=@lnk WHERE email=@email";
+
+            List<SqlParameter> parametros = new List<SqlParameter>()
+            {
+                new SqlParameter() {ParameterName="@email",SqlDbType=SqlDbType.VarChar,Value=email },
+                new SqlParameter() {ParameterName="@lnk",SqlDbType=SqlDbType.VarChar,Value=guid },
             };
-            bd.executaSQL(sql, p);
+            bd.executaSQL(sql, parametros);
         }
 
-        public void AtualizarPasswordPorToken(string guid, string novaPassword)
+        public void atualizarPassword(string guid, string password)
         {
-            Random r = new Random();
-            int novoSal = r.Next(1000, 9999);
+            string sql = "UPDATE utilizadores set palavra_passe=HASHBYTES('SHA2_512',concat(@password,sal)),token=null WHERE token=@lnk";
 
-            string sql = @"UPDATE Utilizadores 
-                           SET Password = HASHBYTES('SHA2_512', CONCAT(@Password, @Sal)), 
-                               Sal = @Sal, 
-                               token = NULL 
-                           WHERE token = @token";
-
-            List<SqlParameter> p = new List<SqlParameter> {
-                new SqlParameter("@Password", novaPassword),
-                new SqlParameter("@Sal", novoSal),
-                new SqlParameter("@token", guid)
+            List<SqlParameter> parametros = new List<SqlParameter>()
+            {
+                new SqlParameter() {ParameterName="@password",SqlDbType=SqlDbType.VarChar,Value=password},
+                new SqlParameter() {ParameterName="@lnk",SqlDbType=SqlDbType.VarChar,Value=guid },
             };
-            bd.executaSQL(sql, p);
+            bd.executaSQL(sql, parametros);
         }
+
         #endregion
 
         #region CRUD (Gestão de Utilizadores)
+
         public void Adicionar()
         {
-            // Validações antes de inserir
             if (!EmailValido(this.Email))
             {
                 throw new Exception("O formato do email não é válido.");
@@ -108,13 +100,11 @@ namespace M17BE_Loja_equipamentos.Classes
                 throw new Exception("O email indicado já se encontra registado no sistema.");
             }
 
-            if(!PasswordForte(this.Email))
-            {                 
+            if (!PasswordForte(this.Password))
+            {
                 throw new Exception("A password deve ter pelo menos 8 caracteres e conter pelo menos um número.");
             }
 
-
-            // Gerar um Sal aleatório
             Random r = new Random();
             int novoSal = r.Next(1403, 9999);
 
@@ -146,14 +136,23 @@ namespace M17BE_Loja_equipamentos.Classes
         }
         #endregion
 
+        #region Verificações e Consultas
 
-        #region Verificações
+        public DataTable devolveDadosUtilizador(string email)
+        {
+            string sql = "SELECT * FROM utilizadores WHERE email=@email";
+            List<SqlParameter> parametros = new List<SqlParameter>()
+            {
+                new SqlParameter() {ParameterName="@email",SqlDbType=SqlDbType.VarChar,Value=email }
+            };
+            DataTable dados = bd.devolveSQL(sql, parametros);
+            return dados;
+        }
 
         public bool EmailDisponivel(string email)
         {
             string sql = "SELECT COUNT(*) FROM Utilizadores WHERE Email = @Email";
-            List<SqlParameter> p = new List<SqlParameter> {new SqlParameter("@Email", email)};
-            // ExecutaScalar ou devolveSQL para verificar o resultado
+            List<SqlParameter> p = new List<SqlParameter> { new SqlParameter("@Email", email) };
             DataTable dt = bd.devolveSQL(sql, p);
             return int.Parse(dt.Rows[0][0].ToString()) == 0;
         }
@@ -161,24 +160,16 @@ namespace M17BE_Loja_equipamentos.Classes
         public bool EmailValido(string email)
         {
             if (string.IsNullOrEmpty(email)) return false;
-           
             return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
         public bool PasswordForte(string password)
         {
-            // Requisitos: Mínimo 8 caracteres, pelo menos 1 número
             if (string.IsNullOrEmpty(password) || password.Length < 8)
                 return false;
 
-            
             return Regex.IsMatch(password, @"[0-9]");
-
-            
         }
-
-
         #endregion
-
     }
 }

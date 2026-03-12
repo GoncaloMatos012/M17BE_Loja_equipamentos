@@ -92,7 +92,7 @@
             <asp:Button ID="btnLogin" runat="server" Text="Entrar" CssClass="btn btn-login w-100 mb-3" OnClick="btnLogin_Click" />
             
             <div class="text-center">
-                <asp:LinkButton ID="btnRecuperar" runat="server" CssClass="link-highlight small d-block mb-2" OnClick="btnRecuperar_Click">
+                <asp:LinkButton ID="btnRecuperar" runat="server" CssClass="link-highlight small d-block mb-2" OnClick="btnRecuperar_Click1">
                     Esqueci-me da palavra-passe
                 </asp:LinkButton>
                 

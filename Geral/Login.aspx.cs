@@ -18,6 +18,7 @@ namespace M17BE_Loja_equipamentos
             {
                 RedirecionarUtilizador((bool)Session["IsAdmin"]);
             }
+            lblErro.Visible = false;
         }
 
         protected void btnLogin_Click(object sender, EventArgs e)
@@ -78,34 +79,79 @@ namespace M17BE_Loja_equipamentos
                 Response.Redirect("index.aspx");
         }
 
-        
+
         protected void btnRecuperar_Click(object sender, EventArgs e)
         {
             try
             {
+                if (txtEmail.Text.Trim().Length == 0)
+                    throw new Exception("Indique um email");
                 string email = txtEmail.Text.Trim();
-                if (string.IsNullOrEmpty(email))
-                    throw new Exception("Indique o seu email no campo de login.");
+                //Verificar se existe o email
+                Classes.Utilizadores utilizador = new Classes.Utilizadores();
+                DataTable dados = utilizador.devolveDadosUtilizador(email);
+                if (dados == null || dados.Rows.Count != 1)
+                    throw new Exception("Caso o email indicado exista, foi enviada uma mensagem para recuperação da palavra passe.");
+                //TOKEN => GUID
+                Guid guid = Guid.NewGuid();
+                string token=guid.ToString();
+                utilizador.recuperarPassword(email, token);
+                //Criar uma mensagem
+                string mensagem = "Clique no link para recuperar a sua password.<br/>";
+                mensagem += "<a href='https://" + Request.Url.Authority + "/recuperarpassword.aspx?";
+                mensagem += "token=" + Server.UrlEncode(token) + "'>Clique aqui</a>";
 
-                Utilizadores utilizador = new Utilizadores();
+                //Enviar a mensagem
+                string meuemail = ConfigurationManager.AppSettings["email"].ToString();
+                string palavrapasse = ConfigurationManager.AppSettings["email_password"].ToString();
+                Helper.enviarMail(meuemail, palavrapasse, email,
+                    "Recuperação de palavra passe", mensagem);
+                lblErro.Text = @"Caso o email indicado exista, 
+                  foi enviada uma mensagem para recuperação da palavra passe.";
+            }
+            catch (Exception ex)
+            {
                 
-                string token = Guid.NewGuid().ToString();
-                utilizador.GuardarToken(email, token);
+                lblErro.Text = ex.Message;
+            }
+        }
 
-                // Configuração da mensagem 
-                string link = "https://" + Request.Url.Authority + "/Geral/RecuperarPassword.aspx?token=" + Server.UrlEncode(token);
-                string mensagem = $"Clique no link para recuperar a sua password: <a href='{link}'>Recuperar agora</a>";
+        protected void btnRecuperar_Click1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (txtEmail.Text.Trim().Length == 0)
+                    throw new Exception("Indique um email");
+                string email = txtEmail.Text.Trim();
+                //Verificar se existe o email
+                Classes.Utilizadores utilizador = new Classes.Utilizadores();
+                DataTable dados = utilizador.devolveDadosUtilizador(email);
+                if (dados == null || dados.Rows.Count != 1)
+                    throw new Exception("Caso o email indicado exista, foi enviada uma mensagem para recuperação da palavra passe.");
+                //TOKEN => GUID
+                Guid guid = Guid.NewGuid();
+                string token = guid.ToString();
+                utilizador.recuperarPassword(email, token);
+                //Criar uma mensagem
+                string mensagem = "Clique no link para recuperar a sua password.<br/>";
+                mensagem += "<a href='https://" + Request.Url.Authority + "/recuperarpassword.aspx?";
+                mensagem += "token=" + Server.UrlEncode(token) + "'>Clique aqui</a>";
 
-                
-                lblErro.Text = "Se o email existir, receberá instruções de recuperação.";
-                lblErro.CssClass = "text-success small mb-2 d-block"; // Muda para verde
+                //Enviar a mensagem
+                string meuemail = ConfigurationManager.AppSettings["email"].ToString();
+                string palavrapasse = ConfigurationManager.AppSettings["email_password"].ToString();
+                Helper.enviarMail(meuemail, palavrapasse, email,
+                    "Recuperação de palavra passe", mensagem);
+                lblErro.Text = @"Caso o email indicado exista, 
+                  foi enviada uma mensagem para recuperação da palavra passe.";
                 lblErro.Visible = true;
             }
             catch (Exception ex)
             {
-                lblErro.Text = "Erro: " + ex.Message;
                 lblErro.Visible = true;
+                lblErro.Text = ex.Message;
             }
+
         }
     }
 }
