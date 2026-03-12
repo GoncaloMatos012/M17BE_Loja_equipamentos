@@ -1,6 +1,8 @@
 ﻿CREATE TABLE Categorias (
     IdCategoria INT PRIMARY KEY IDENTITY(1,1),
-    NomeCategoria NVARCHAR(100) NOT NULL
+    NomeCategoria NVARCHAR(100) NOT NULL,
+    Destaque BIT DEFAULT 0,
+    ImagemURL NVARCHAR(255)
 )
 
 

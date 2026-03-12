@@ -39,7 +39,6 @@ namespace M17BE_Loja_equipamentos.Classes
             return bd.devolveSQL("SELECT * FROM Produtos WHERE Stock > 0 ORDER BY DataCriacao DESC");
         }
 
-        // Listar Destaques para a Home
         public DataTable ListaDestaques()
         {
             return bd.devolveSQL("SELECT * FROM Produtos WHERE Destaque = 1 AND Stock > 0");
